@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ninja Regulasi Emosi - Edisi Final 100%</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Bangers&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mauve: #9d8189;
+            --mauve-dark: #6d595e;
+            --mauve-light: #d5b9b2;
+            --cream: #f4eeed;
+            --cream-dark: #ede0d4;
+            --white: #ffffff;
+            --text: #2d2d2d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--white); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+
+        /* Navigasi */
+        nav { background: var(--cream); padding: 15px; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; gap: 10px; border-bottom: 2px solid var(--mauve-light); }
+        nav button { background: var(--white); border: 2px solid var(--mauve); color: var(--mauve); padding: 10px 15px; border-radius: 25px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 0.9rem; }
+        nav button.active { background: var(--mauve); color: var(--white); }
+
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        .section { display: none; animation: fadeIn 0.5s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--white); padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid var(--cream-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+
+        /* Jendela Materi */
+        .jendela-box { border: 2px solid var(--mauve-light); border-radius: 15px; margin-bottom: 12px; overflow: hidden; background: var(--white); }
+        .jendela-header { background: var(--cream); padding: 18px 20px; cursor: pointer; font-weight: 700; color: var(--mauve-dark); display: flex; justify-content: space-between; align-items: center; }
+        .jendela-content { display: none; padding: 20px; border-top: 1px solid var(--mauve-light); }
+        .case-item { background: #fdfaf9; padding: 15px; border-left: 4px solid var(--mauve); margin-top: 10px; border-radius: 8px; font-size: 0.95rem; }
+
+        /* Emergency & Breathe */
+        .emergency-btn { background: #e63946; color: white; padding: 18px 40px; border: none; border-radius: 50px; font-weight: 800; cursor: pointer; animation: pulse 2s infinite; display: block; margin: 20px auto; font-size: 1.1rem; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4); } 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(230, 57, 70, 0); } 100% { transform: scale(1); } }
+        
+        #breathe-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .breathe-circle { width: 150px; height: 150px; background: var(--mauve-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; animation: breathe 8s infinite ease-in-out; }
+        @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.8); background: var(--mauve); } }
+
+        /* Misi Ninja */
+        .mission-arena { min-height: 350px; background: var(--cream); border: 3px solid var(--mauve); border-radius: 20px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: 20px; }
+        .crack-img { position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/cracked-glass.png'); display: none; pointer-events: none; z-index: 10; opacity: 0.6; }
+        .flower { position: absolute; font-size: 2rem; animation: fall 2.5s forwards; }
+        @keyframes fall { to { transform: translateY(400px) rotate(360deg); opacity: 0; } }
+        .hold-btn { width: 120px; height: 120px; border: 4px dashed var(--mauve); border-radius: 50%; background: white; font-weight: 800; cursor: pointer; transition: 0.3s; z-index: 5; }
+        .hold-btn:active { transform: scale(1.2); border-style: solid; background: var(--mauve-light); color: white; }
+
+        /* Kuis */
+        .choice-btn { width: 100%; padding: 15px; margin: 8px 0; border: 1px solid var(--mauve-light); border-radius: 12px; background: white; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.3s; }
+        .choice-btn:hover { background: var(--cream); border-color: var(--mauve); }
+    </style>
+</head>
+<body>
+
+<div id="breathe-overlay">
+    <div class="breathe-circle" id="breathe-text">Tarik Napas...</div>
+    <h2 id="breathe-sub" style="margin-top:40px; color:var(--mauve-dark);">Ikuti Lingkaran</h2>
+    <button onclick="closeEmergency()" style="margin-top:40px; padding:10px 20px; border-radius:20px; border:1px solid var(--mauve); background:white; cursor:pointer;">Sudah Tenang</button>
+</div>
+
+<nav>
+    <button onclick="nav('home')" id="n-home" class="active">🏠 Beranda</button>
+    <button onclick="nav('intro')" id="n-intro">🧘 Pengenalan</button>
+    <button onclick="nav('edu')" id="n-edu">🌟 Edukasi</button>
+    <button onclick="nav('misi')" id="n-misi">🥷 Misi Ninja</button>
+    <button onclick="nav('quiz')" id="n-quiz">📝 Kuis</button>
+</nav>
+
+<div class="container">
+    <section id="home" class="section active">
+        <h1 style="font-family:'Bangers'; color:var(--mauve); font-size:4rem; text-align:center;">REGULASI EMOSI</h1>
+        <div style="background:#fff0f0; border:2px dashed #e63946; padding:15px; text-align:center; color:#e63946; font-weight:700; border-radius:10px; margin-bottom:20px;">
+            ⚠️ Awas! Jangan Biarkan Emosi Menghancurkanmu!
+        </div>
+        <div class="card" style="text-align:center;">
+            <p style="font-size:1.1rem;">"Marah itu normal, tapi jadi 'toxic' itu pilihan. Ambil napas dulu yuk di Emergency Button?"</p>
+            <button class="emergency-btn" onclick="openEmergency()">EMERGENCY BUTTON</button>
+            <h3 style="margin-top:25px;">Halo, Teman-Teman! Selamat Datang! 🌟</h3>
+            <p>Pernah nggak sih kamu merasa tiba-tiba pengen marah banget, sedih tanpa alasan, atau malah pengen banting barang karena kesal? Tenang, itu wajar kok! Sebagai remaja, emosi kita memang lagi "naik-turun" karena perubahan hormon dan fisik.</p>
+        </div>
+        <div class="card" style="border-left: 10px solid var(--mauve);">
+            <p><strong>💡 Penting untuk Diingat:</strong> Perilaku agresif yang dibiarkan pada masa remaja bisa menjadi kebiasaan jangka panjang hingga dewasa. Dengan belajar Regulasi Emosi sekarang, kamu sedang melindungi masa depanmu sendiri. Kuncinya bukan menghilangkan emosi itu, tapi bagaimana kita mengaturnya. Yuk, kita kenalan dengan Regulasi Emosi!</p>
+        </div>
+    </section>
+
+    <section id="intro" class="section">
+        <h2>🧘 PENGENALAN</h2>
+        <div class="card">
+            <p>Emosi adalah respon alami tubuh terhadap situasi. Marah, sedih, takut, kecewa itu normal. Masalah muncul saat emosi menguasai tindakan. Remaja lebih mudah emosional karena otak pengendali diri belum matang. Bagian otak logika berkembang lebih lambat dibanding pusat emosi (<b>Steinberg, 2014</b>).</p>
+        </div>
+        <div class="card" style="background:var(--cream); border-left: 10px solid var(--mauve);">
+            <p><strong>Kementerian Kesehatan (Kemenkes):</strong> Menekankan pentingnya kemampuan mengenali dan mengendalikan emosi sebagai bagian dari keterampilan hidup sehat remaja untuk mencegah masalah perilaku (Ayo Sehat 2022-2025/keslan.kemkes.go.id).</p>
+        </div>
+    </section>
+
+    <section id="edu" class="section">
+        <h2>🌟 MENU EDUKASI</h2>
+        
+        <div class="jendela-box">
+            <div class="jendela-header" onclick="tog('j1')">🌟 Mengenal Pusat Kendali Diri Regulasi Emosi <span>▼</span></div>
+            <div id="j1" class="jendela-content">
+                <p>Regulasi emosi adalah kemampuan kita untuk mengenali, memantau, dan mengubah cara kita merespons perasaan agar kita tetap tenang dan tidak melakukan hal yang merugikan diri sendiri atau orang lain.</p>
+                <p style="margin-top:15px;"><strong>Analogi Bendungan:</strong> Bayangkan emosi itu seperti air di dalam bendungan. Kalau tidak diatur, airnya bisa meluap dan merusak segalanya (perilaku agresif). Tapi kalau pintunya dibuka pelan-pelan, airnya bisa jadi sumber energi yang baik.</p>
+            </div>
+        </div>
+
+        <div class="jendela-box">
+            <div class="jendela-header" onclick="tog('j2')">👓 Strategi 1: Cognitive Reappraisal (Ganti Kacamata) <span>▼</span></div>
+            <div id="j2" class="jendela-content">
+                <p>Strategi ini dimaknai dengan <b>Mengubah cara berpikir agar emosi tidak meledak</b>. Emosi muncul dari makna yang kita beri pada kejadian (Gross & John, 2003).</p>
+                <p style="margin: 15px 0; background:var(--cream); padding:10px; border-radius:8px;">
+                    <b>Langkah-langkah Praktis:</b><br>
+                    1. Sadari pikiran otomatis | 2. Uji pikiran itu (Fakta atau Asumsi?) | 3. Cari sudut pandang lain | 4. Pilih respon yang rasional.
+                </p>
+                <p style="font-weight:bold;">📚 5 Contoh Kasus Nyata:</p>
+                <div class="case-item"><b>1. Dimarahi Guru:</b> "Guru benci saya" ➡️ "Guru ingin saya disiplin agar sukses di masa depan."</div>
+                <div class="case-item"><b>2. Teman Tak Mengajak:</b> "Saya tak disukai" ➡️ "Mungkin mereka lupa mengabari saya, bukan sengaja menjauh."</div>
+                <div class="case-item"><b>3. Nilai Jelek:</b> "Saya bodoh" ➡️ "Saya kurang belajar kali ini, saya bisa perbaiki nanti."</div>
+                <div class="case-item"><b>4. Dilarang Ortu:</b> "Mereka jahat" ➡️ "Mereka ingin saya tetap aman di rumah, itu bentuk kasih sayang."</div>
+                <div class="case-item"><b>5. Dihina di Sosmed:</b> "Saya harus balas" ➡️ "Balas dendam hanya akan menurunkan level saya."</div>
+            </div>
+        </div>
+
+        <div class="jendela-box">
+            <div class="jendela-header" onclick="tog('j3')">🛑 Strategi 2: Expressive Suppression (Rem Darurat) <span>▼</span></div>
+            <div id="j3" class="jendela-content">
+                <p>Menahan ekspresi emosi sementara agar tidak bereaksi impulsif. Ini adalah <b>tombol jeda</b> sebelum emosi memuncak (Gross, 2015).</p>
+                <p style="margin: 15px 0; background:var(--cream); padding:10px; border-radius:8px;">
+                    <b>Langkah-langkah Praktis:</b><br>
+                    1. Diam (jangan bicara dulu) | 2. Atur napas (tarik 4 hitungan, tahan 2, buang 4) | 3. Jauhkan diri dari pemicu | 4. Ekspresikan perasaan saat sudah tenang.
+                </p>
+                <p style="color:#e63946; font-weight:bold; font-size:0.9rem;">⚠️ Catatan Penting: Strategi ini hanya untuk jeda. Jangan dipendam terus karena berisiko stres fisik & kelelahan mental (Gross & Levenson 1997).</p>
+            </div>
+        </div>
+
+        <div class="jendela-box">
+            <div class="jendela-header" onclick="tog('j4')">🌈 Dampak Positif & Bahaya Agresi <span>▼</span></div>
+            <div id="j4" class="jendela-content">
+                <p><b>Dampak Positif:</b> Menjadi remaja tangguh, hubungan sosial sehat, dan kesehatan mental terjaga.</p>
+                <p style="margin-top:10px;"><b>Bahaya Agresi:</b> Kegagalan regulasi emosi memicu Agresi Fisik (memukul, membanting) dan Agresi Verbal (menghina, mengejek).</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="misi" class="section">
+        <h2>🥷 MISI NINJA</h2>
+        <div class="card">
+            <h3>Misi 1: Segel Shuriken Mulut</h3>
+            <div class="mission-arena" id="arena1">
+                <div class="crack-img" id="crack"></div>
+                <p id="m1-task">Seseorang mengejekmu "Cupu!". Reaksimu?</p>
+                <div id="m1-ui" style="width:100%; margin-top:20px;">
+                    <button class="choice-btn" onclick="m1Finish(false)">❌ Balas Ejekan (Emosi Meledak)</button>
+                    <button class="choice-btn" onclick="m1Finish(true)">✅ Diam & Gunakan Mantra Sabar</button>
+                </div>
+            </div>
+            <p id="m1-msg" style="margin-top:15px; font-weight:bold; text-align:center;"></p>
+        </div>
+
+        <div class="card">
+            <h3>Misi 2: Penjinak Api Amuk</h3>
+            <div class="mission-arena" style="background:#ffdbdb;">
+                <p style="margin-bottom:20px; text-align:center;">Tahan emosimu! Klik & Tahan lingkaran selama 10 detik tanpa dilepas.</p>
+                <div class="hold-btn" id="holdBtn" style="display:flex; align-items:center; justify-content:center;">TAHAN</div>
+                <h3 id="timer" style="margin-top:20px;">10 Detik</h3>
+            </div>
+            <p id="m2-msg" style="margin-top:15px; font-weight:bold; text-align:center;"></p>
+        </div>
+    </section>
+
+    <section id="quiz" class="section">
+        <h2>📝 KUIS UJIAN TINGKAT</h2>
+        <div class="card" id="q-box">
+            <h4 id="q-txt"></h4>
+            <div id="q-opts" style="margin-top:20px;"></div>
+        </div>
+        <div class="card" id="q-res" style="display:none; text-align:center;">
+            <h2 id="final-score" style="color:var(--mauve); font-size:3rem;"></h2>
+            <button class="emergency-btn" onclick="location.reload()">Ulangi Kuis</button>
+        </div>
+    </section>
+</div>
+
+<script>
+    // Navigation
+    function nav(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById('n-'+id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    // Toggle Content
+    function tog(id) {
+        let e = document.getElementById(id);
+        e.style.display = (e.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Emergency & Breathe Logic
+    function openEmergency() {
+        document.getElementById('breathe-overlay').style.display = 'flex';
+        let state = 0;
+        const textE = document.getElementById('breathe-text');
+        const subE = document.getElementById('breathe-sub');
+        window.breatheInt = setInterval(() => {
+            state = (state + 1) % 3;
+            if(state == 0) { textE.innerText = "Tarik Napas..."; subE.innerText = "Hiruup pelan-pelan"; }
+            if(state == 1) { textE.innerText = "Tahan..."; subE.innerText = "Rasakan ketenangan"; }
+            if(state == 2) { textE.innerText = "Buang..."; subE.innerText = "Lepaskan amarahmu"; }
+        }, 3000);
+    }
+    function closeEmergency() {
+        document.getElementById('breathe-overlay').style.display = 'none';
+        clearInterval(window.breatheInt);
+    }
+
+    // Misi 1
+    function m1Finish(win) {
+        document.getElementById('m1-ui').style.display = 'none';
+        if(win) {
+            document.getElementById('m1-msg').innerText = "✅ BERHASIL! Ninja sejati tahu kapan harus menyimpan senjata kata-katanya.";
+            for(let i=0; i<15; i++) {
+                let f = document.createElement('div'); f.className='flower'; f.innerText='🌸';
+                f.style.left = Math.random()*90+'%'; document.getElementById('arena1').appendChild(f);
+            }
+        } else {
+            document.getElementById('crack').style.display = 'block';
+            document.getElementById('m1-msg').innerText = "❌ GAGAL. Amarahmu merusak ketenanganmu.";
+        }
+    }
+
+    // Misi 2
+    let hT, hS = 10;
+    const btn = document.getElementById('holdBtn');
+    btn.onmousedown = btn.ontouchstart = (e) => {
+        e.preventDefault();
+        hT = setInterval(() => {
+            hS--; document.getElementById('timer').innerText = hS + " Detik";
+            if(hS <= 0) {
+                clearInterval(hT); document.getElementById('m2-msg').innerText = "✅ API PADAM! Kekuatan fisikmu adalah untuk melindungi, bukan merusak.";
+            }
+        }, 1000);
+    };
+    btn.onmouseup = btn.onmouseleave = btn.ontouchend = () => {
+        clearInterval(hT); if(hS > 0) { hS = 10; document.getElementById('timer').innerText = "10 Detik"; }
+    };
+
+    // Kuis Data (Sesuai Dokumen)
+    const qData = [
+        { q: "Siswa gugup presentasi lalu berkata 'Deg-degan ini energi positif'. Strategi apa ini?", a: ["Cognitive Reappraisal", "Expressive Suppression", "Emotional Avoidance", "Distraction"], c: 0 },
+        { q: "Ejekan teman membuat sakit hati, kamu diam agar tidak ribut di kelas. Ini contoh...", a: ["Cognitive Reappraisal", "Expressive Suppression", "Aggression", "Assertive"], c: 1 },
+        { q: "Manfaat utama Cognitive Reappraisal adalah...", a: ["Meredam emosi negatif sejak awal", "Menghilangkan emosi selamanya", "Meningkatkan nafsu makan", "Jadi pendiam"], c: 0 },
+        { q: "Risiko jika Suppression dilakukan terus menerus tanpa diolah?", a: ["Daya ingat tajam", "Hubungan lebih tulus", "Stres fisik & kelelahan mental", "Paham materi sulit"], c: 2 },
+        { q: "Ibu batal pergi, kamu kecewa. Mana respon Reappraisal?", a: ["Pikir Ibu mungkin lelah", "Banting pintu", "Menangis sendirian", "Berjanji tak mau pergi lagi"], c: 0 }
+    ];
+    let qI = 0, sc = 0;
+    function loadQ() {
+        let d = qData[qI]; document.getElementById('q-txt').innerText = (qI+1)+". "+d.q;
+        const op = document.getElementById('q-opts'); op.innerHTML = "";
+        d.a.forEach((o, i) => {
+            let b = document.createElement('button'); b.className='choice-btn'; b.innerText=o;
+            b.onclick = () => { if(i==d.c) sc+=20; qI++; if(qI < qData.length) loadQ(); else showSc(); }; op.appendChild(b);
+        });
+    }
+    function showSc() {
+        document.getElementById('q-box').style.display='none';
+        document.getElementById('q-res').style.display='block';
+        document.getElementById('final-score').innerText = "SKOR ANDA: " + sc;
+    }
+    loadQ();
+</script>
+</body>
+</html>
