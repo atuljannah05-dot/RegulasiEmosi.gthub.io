@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi Regulasi Emosi Remaja</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #2D6A4F; --soft-bg: #D8F3DC; --accent: #FFB347; --white: #ffffff; --dark: #1B4332; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--soft-bg); color: var(--dark); margin: 0; transition: background 1s ease; overflow-x: hidden; }
+
+        /* TASKBAR FINAL */
+        header { position: fixed; top: 0; width: 100%; height: 70px; background: rgba(255, 255, 255, 0.95); display: flex; align-items: center; justify-content: center; z-index: 1000; border-bottom: 2px solid var(--primary); }
+        nav.taskbar { display: flex; gap: 4px; font-size: 0.55rem; font-weight: 700; }
+        nav.taskbar span { cursor: pointer; padding: 6px 4px; border-radius: 8px; transition: 0.3s; text-align: center; }
+        nav.taskbar span.active { background: var(--primary); color: white; }
+
+        .container { padding: 90px 20px 40px; max-width: 500px; margin: auto; min-height: 100vh; }
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--white); padding: 25px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .btn-action { background: var(--accent); color: white; border: none; padding: 18px; border-radius: 20px; width: 100%; font-weight: 800; font-size: 1rem; cursor: pointer; margin-top: 10px; }
+
+        /* Animations */
+        .story-p { opacity: 0; animation: textAppear 0.8s forwards; margin-bottom: 15px; line-height: 1.6; }
+        @keyframes textAppear { to { opacity: 1; } }
+        
+        /* Breath */
+        .breath-wrap { width: 160px; height: 160px; margin: 20px auto; position: relative; display: flex; align-items: center; justify-content: center; }
+        .breath-circle { position: absolute; width: 100%; height: 100%; background: var(--primary); border-radius: 50%; opacity: 0.2; transition: 4s ease-in-out; }
+        .breath-emoji { font-size: 4rem; z-index: 2; }
+
+        /* Mind Switch List */
+        .ms-grid { display: grid; gap: 10px; margin-top: 15px; }
+        .ms-item { background: #f0f7f4; padding: 12px; border-radius: 12px; font-size: 0.85rem; border-left: 4px solid var(--primary); }
+
+        /* Latihan Options */
+        .opt { background: #f8f9fa; padding: 15px; border-radius: 15px; margin-bottom: 10px; cursor: pointer; font-weight: 600; border: 2px solid transparent; position: relative; }
+        .opt.correct { background: #d4edda; border-color: #28a745; }
+        .opt.wrong { background: #f8d7da; border-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="taskbar">
+            <span id="t0" class="active" onclick="nav(0)">Beranda</span>
+            <span id="t1" onclick="nav(1)">Kenali Emosi</span>
+            <span id="t2" onclick="nav(2)">Pahami Emosi</span>
+            <span id="t3" onclick="nav(3)">Teknik Regulasi</span>
+            <span id="t4" onclick="nav(4)">Latihan</span>
+            <span id="t5" onclick="nav(5)">Evaluasi</span>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="p0" class="page active">
+            <div id="av-box" style="font-size: 6rem; text-align: center; margin: 20px 0;">😊</div>
+            <div id="type-text" style="text-align: center; font-weight: 600; min-height: 80px; font-size: 1.1rem;"></div>
+            <div id="btn-area" style="display:none; text-align:center;">
+                <button class="btn-action" onclick="showIntro()">Mulai Sekarang</button>
+            </div>
+            <div id="intro-box" class="card" style="display:none; text-align:center; animation: zoomIn 0.5s;">
+                <p>“Kamu akan belajar cara mengontrol emosi supaya tidak bereaksi berlebihan”</p>
+                <button class="btn-action" onclick="nav(1)">Ayo Lanjut</button>
+            </div>
+        </section>
+
+        <section id="p1" class="page">
+            <div class="card">
+                <h3>Hari ini kamu merasa apa?</h3>
+                <div style="display:flex; justify-content: space-around; font-size: 3rem; margin: 20px 0;">
+                    <span onclick="kenal('😠', 'Wajar kalau marah, tarik napas dulu.')" style="cursor:pointer">😠</span>
+                    <span onclick="kenal('😢', 'Sedih itu manusiawi, tenang ya.')" style="cursor:pointer">😢</span>
+                    <span onclick="kenal('😰', 'Cemas itu oke, kamu aman di sini.')" style="cursor:pointer">😰</span>
+                </div>
+                <p id="k-fb" style="text-align:center; font-weight:700; color:var(--primary); min-height:24px;"></p>
+                <p>Slider emosi (1–5):</p>
+                <input type="range" min="1" max="5" style="width:100%; accent-color: var(--primary);">
+            </div>
+            <button class="btn-action" onclick="nav(2)">Pahami Emosi</button>
+        </section>
+
+        <section id="p2" class="page">
+            <div id="story-content">
+                <div class="card">
+                    <h3>STORY 1</h3>
+                    <p class="story-p" style="animation-delay:0.5s;">Kamu kirim pesan penting. Pesanmu dibaca… tapi belum dibalas.</p>
+                    <p class="story-p" style="animation-delay:1.5s;">Di kepala kamu muncul pikiran: <b>“Mungkin dia sengaja mengabaikan aku.”</b></p>
+                    <p class="story-p" style="animation-delay:2.5s;">Dari pikiran itu, perasaan mulai berubah. Kamu jadi kesal.</p>
+                    <p class="story-p" style="animation-delay:3.5s; background:#fff3cd; padding:10px; border-radius:10px;"><i>Perhatikan ini: Bukan karena pesan tidak dibalas. Tapi karena apa yang kamu pikirkan tentang itu.</i></p>
+                    <p class="story-p" style="animation-delay:4.5s;">Sekarang tubuh kamu ikut bereaksi. Jari mulai cepat. Kamu ingin langsung membalas.</p>
+                    <p class="story-p" style="animation-delay:5.5s; font-weight:bold; color:var(--primary);">Berhenti sebentar. Yang terjadi barusan adalah: Pikiran → Emosi → Aksi</p>
+                    <button class="btn-action" onclick="showS2()">Lanjut ke STORY 2</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="p3" class="page">
+            <div id="reg-intro" class="card" style="text-align:center;">
+                <div style="font-size:4rem;">😤</div>
+                <p>Hampir marah... <b>FREEZE!</b></p>
+                <button class="btn-action" onclick="showRegFull()">“Sekarang kamu punya kontrol”</button>
+            </div>
+
+            <div id="reg-full" style="display:none;">
+                <div class="card">
+                    <p>Kamu akan belajar 2 cara mengontrol emosi dari strategi <b>James J. Gross</b>:</p>
+                    <ul>
+                        <li><b>Mengubah cara pikir</b> (Cognitive Reappraisal)</li>
+                        <li><b>Mengontrol ekspresi emosi</b> (Expressive Suppression)</li>
+                    </ul>
+                    <p><small>Versi sederhana agar bisa langsung dipakai dalam kehidupan sehari-hari.</small></p>
+                </div>
+
+                <div class="card">
+                    <h3>Teknik 1: Mind Switch (Cognitive)</h3>
+                    <p>Pikiran negatif ➡️ berubah jadi positif (bubble):</p>
+                    <div class="ms-grid">
+                        <div class="ms-item">“Dia sengaja” ➡️ “Mungkin tidak sengaja”</div>
+                        <div class="ms-item">“Dia cuek” ➡️ “Mungkin dia lagi sibuk”</div>
+                        <div class="ms-item">“Dia gak peduli aku” ➡️ “Mungkin dia belum sempat balas”</div>
+                        <div class="ms-item">“Semua orang gak suka aku” ➡️ “Gak semua, ada yang tetap peduli”</div>
+                        <div class="ms-item">“Ini pasti bakal buruk” ➡️ “Belum tentu, bisa aja hasilnya baik”</div>
+                        <div class="ms-item">“Aku gak bisa” ➡️ “Aku belum bisa, tapi bisa belajar”</div>
+                        <div class="ms-item">“Dia pasti marah sama aku” ➡️ “Belum tentu, aku bisa cek dulu”</div>
+                        <div class="ms-item">“Aku paling buruk di sini” ➡️ “Aku masih bisa berkembang”</div>
+                    </div>
+                </div>
+
+                <div class="card" style="text-align:center;">
+                    <h3>Teknik 2: Slow Reaction (Suppression)</h3>
+                    <div class="breath-wrap">
+                        <div class="breath-circle" id="b-circle"></div>
+                        <div class="breath-emoji" id="b-emoji">👤</div>
+                    </div>
+                    <p id="b-instr" style="font-weight:bold;">4 detik tarik | 2 detik tahan | 6 detik buang</p>
+                    <button class="btn-action" onclick="runBreath()">Mulai Latihan</button>
+                </div>
+
+                <div class="card">
+                    <h3>Video Panduan</h3>
+                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/yH1jxvOwWdY" frameborder="0" style="border-radius:15px; margin-bottom:10px;"></iframe>
+                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/gcLkD9EfHXs" frameborder="0" style="border-radius:15px;"></iframe>
+                </div>
+                <button class="btn-action" onclick="nav(4)">Lanjut ke Latihan</button>
+            </div>
+        </section>
+
+        <section id="p4" class="page">
+            <div id="lat-box">
+                <div class="card">
+                    <p><b>SITUASI 1:</b> Kamu sudah berusaha mengerjakan sesuatu. Tapi seseorang bilang: “Ah, ini gampang kok. Masa kamu nggak bisa?”</p>
+                    <p>Kamu merasa diremehkan. Apa respon kamu?</p>
+                    <div class="opt" onclick="ansLat(this, 1, 'A')">A. Membalas dengan kata kasar</div>
+                    <div class="opt" onclick="ansLat(this, 1, 'B')">B. Diam sebentar, lalu menenangkan diri</div>
+                    <div class="opt" onclick="ansLat(this, 1, 'C')">C. Menyindir balik</div>
+                    <div id="fb1" style="margin-top:10px; font-weight:bold;"></div>
+                </div>
+            </div>
+            <div id="lat-penutup" class="card" style="display:none; text-align:center;">
+                <p>“Sering kali bukan situasinya yang bikin masalah besar. Tapi reaksi kita yang terlalu cepat.”</p>
+                <p><b>Kamu bisa memilih untuk berhenti sejenak sebelum bertindak.</b></p>
+                <button class="btn-action" onclick="nav(5)">Ke Evaluasi Akhir</button>
+            </div>
+        </section>
+
+        <section id="p5" class="page">
+            <div class="progress-container" style="background:#eee; height:8px; border-radius:4px; margin-bottom:20px; overflow:hidden;">
+                <div id="ev-bar" style="height:100%; width:0; background:var(--primary); transition:0.4s;"></div>
+            </div>
+            <div id="ev-content"></div>
+            <div id="ev-final" style="display:none; text-align:center;">
+                <h1 style="font-size:4rem;">✨🎊✨</h1>
+                <h2>“Kamu sudah belajar mengontrol emosi”</h2>
+                <button class="btn-action" onclick="location.reload()">Selesai</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function nav(n) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.taskbar span').forEach(s => s.classList.remove('active'));
+            document.getElementById('p'+n).classList.add('active');
+            document.getElementById('t'+n).classList.add('active');
+            window.scrollTo(0,0);
+            if(n===0) runType();
+            if(n===5) runEval();
+        }
+
+        // 1. Beranda
+        function runType() {
+            const av = document.getElementById('av-box');
+            const box = document.getElementById('type-text');
+            const steps = [
+                {e:"😊", t:"Pernah marah berlebihan… terus nyesel?", c:"#D8F3DC"},
+                {e:"😠", t:"Kejadian cepat, penyesalan datang belakangan", c:"#FFD6D6"},
+                {e:"😢", t:"Di sini kamu belajar kontrol emosi kamu", c:"#FFF4E0"}
+            ];
+            let i = 0;
+            const flow = () => {
+                if(i < steps.length) {
+                    av.innerText = steps[i].e; box.innerText = steps[i].t;
+                    document.body.style.backgroundColor = steps[i].c;
+                    i++; setTimeout(flow, 2500);
+                } else { document.getElementById('btn-area').style.display='block'; }
+            };
+            flow();
+        }
+        runType();
+        function showIntro() { document.getElementById('btn-area').style.display='none'; document.getElementById('intro-box').style.display='block'; }
+
+        // 2. Kenali
+        function kenal(e, m) { document.getElementById('k-fb').innerText = m; }
+
+        // 3. Pahami
+        function showS2() {
+            document.getElementById('story-content').innerHTML = `
+                <div class="card">
+                    <h3>STORY 2</h3>
+                    <p class="story-p">Kamu lagi capek. Tiba-tiba ada yang mengejek kamu.</p>
+                    <p class="story-p" style="animation-delay:1s;">Pikiran muncul cepat: <b>“Dia merendahkan aku.”</b></p>
+                    <p class="story-p" style="animation-delay:2s;">Perasaan langsung naik: Kamu jadi marah. Tanpa jeda, kamu langsung membalas.</p>
+                    <p class="story-p" style="animation-delay:3s;">Beberapa detik kemudian… Suasana jadi tidak enak. Sekarang muncul pikiran baru: “Harusnya aku tahan dulu.”</p>
+                    <p class="story-p" style="animation-delay:4s; background:#d1ecf1; padding:10px; border-radius:10px;"><i>Perhatikan ini: Saat emosi muncul terlalu cepat, kamu tidak sempat memilih respon.</i></p>
+                    <p class="story-p" style="animation-delay:5s; font-weight:800; text-align:center;">Emosi tidak muncul tiba-tiba. Emosi datang dari pikiran. Kalau kamu sadar pikirannya, kamu bisa mengubah reaksinya.</p>
+                    <button class="btn-action" onclick="nav(3)">Teknik Regulasi</button>
+                </div>
+            `;
+        }
+
+        // 4. Regulasi
+        function showRegFull() { document.getElementById('reg-intro').style.display='none'; document.getElementById('reg-full').style.display='block'; }
+        function runBreath() {
+            const circle = document.getElementById('b-circle'); const emo = document.getElementById('b-emoji'); const ins = document.getElementById('b-instr');
+            let cycle = 0;
+            const step = () => {
+                if(cycle < 1) {
+                    emo.innerText = "🌬️"; ins.innerText = "TARIK (4 detik)"; circle.style.transform = "scale(1.7)";
+                    setTimeout(() => {
+                        emo.innerText = "🛑"; ins.innerText = "TAHAN (2 detik)";
+                        setTimeout(() => {
+                            emo.innerText = "💨"; ins.innerText = "BUANG (6 detik)"; circle.style.transform = "scale(0.8)";
+                            cycle++; setTimeout(step, 6000);
+                        }, 2000);
+                    }, 4000);
+                } else { emo.innerText = "🧘‍♂️"; ins.innerText = "Selesai. Kamu lebih terkontrol."; }
+            };
+            step();
+        }
+
+        // 5. Latihan
+        function ansLat(el, situ, ch) {
+            const fb = document.getElementById('fb' + situ);
+            if(situ === 1) {
+                if(ch === 'A') { el.classList.add('wrong'); fb.innerHTML = "✗ Respon kamu langsung memperbesar masalah. <br> Setelah itu… kamu bisa merasa bersalah."; fb.style.color="red"; }
+                else if(ch === 'C') { el.classList.add('wrong'); fb.innerHTML = "✗ Kamu tidak langsung marah… tapi tetap menyerang. <br> Konflik bisa berlanjut."; fb.style.color="orange"; }
+                else { 
+                    el.classList.add('correct'); fb.innerHTML = "✓ BENAR! Kamu berhasil menahan reaksi. <br> Itu tanda kontrol diri."; fb.style.color="green";
+                    setTimeout(() => {
+                        document.getElementById('lat-box').innerHTML = `
+                            <div class="card">
+                                <p><b>SITUASI 3:</b> Kamu sudah berusaha tampil baik. Tapi ada yang komentar: “Kayak gitu doang?”</p>
+                                <p>Kamu langsung merasa kesal. Apa yang kamu lakukan?</p>
+                                <div class="opt" onclick="ansLat(this, 2, 'A')">A. Langsung membalas dengan emosi</div>
+                                <div class="opt" onclick="ansLat(this, 2, 'B')">B. Berpikir ulang sebelum merespon</div>
+                                <div class="opt" onclick="ansLat(this, 2, 'C')">C. Menjauh sambil marah</div>
+                                <div id="fb2" style="margin-top:10px; font-weight:bold;"></div>
+                            </div>`;
+                    }, 2500);
+                }
+            } else {
+                if(ch === 'A') { el.classList.add('wrong'); fb.innerHTML = "✗ Kamu bereaksi cepat. <br> Beberapa saat kemudian… kamu bisa menyesal."; fb.style.color="red"; }
+                else if(ch === 'C') { el.classList.add('wrong'); fb.innerHTML = "✗ Kamu menghindar… tapi emosi belum selesai."; fb.style.color="orange"; }
+                else {
+                    el.classList.add('correct'); fb.innerHTML = "✓ BENAR! Kamu mengubah cara pikir sebelum bertindak. <br> Itu membantu kamu tetap tenang."; fb.style.color="green";
+                    setTimeout(() => { document.getElementById('lat-box').style.display='none'; document.getElementById('lat-penutup').style.display='block'; }, 2500);
+                }
+            }
+        }
+
+        // 6. Evaluasi
+        const evData = [
+            {q: "Teman kirim tugas tanpa nama kamu di grup. Apa respon terbaik?", a: ["Langsung marah di grup", "Diam tapi menyimpan kesal", "Pikir mungkin tidak sengaja, tanya baik-baik"], r: 2},
+            {q: "Kamu diejek saat sedang lelah. Apa yang sebaiknya dilakukan?", a: ["Langsung membalas ejekan", "Menahan diri sejenak lalu menarik napas", "Membalas dengan kata lebih kasar"], r: 1},
+            {q: "Teman tidak membalas chat kamu. Apa pikiran yang lebih tepat?", a: ["Dia sengaja mengabaikan saya", "Dia pasti tidak peduli", "Mungkin dia sedang sibuk"], r: 2},
+            {q: "Kamu sangat kesal dan ingin langsung bicara kasar. Langkah pertama?", a: ["Mengeluarkan semua emosi", "Diam sebentar dan pikirkan akibatnya", "Menyindir di media sosial"], r: 1},
+            {q: "Saat marah, kamu mulai berpikir negatif. Apa yang harus dilakukan?", a: ["Mengikuti pikiran tersebut", "Mengubah cara pikir agar lebih tenang", "Langsung menjauh tanpa kontrol"], r: 1}
+        ];
+        let curE = 0;
+        function runEval() {
+            if(curE < evData.length) {
+                document.getElementById('ev-bar').style.width = (curE/evData.length)*100 + "%";
+                let d = evData[curE];
+                document.getElementById('ev-content').innerHTML = `
+                    <div class="card">
+                        <p><b>${d.q}</b></p>
+                        ${d.a.map((ans, idx) => `<div class="opt" onclick="checkEv(${idx})">${ans}</div>`).join('')}
+                    </div>`;
+            } else {
+                document.getElementById('ev-bar').style.width = "100%";
+                document.getElementById('ev-content').style.display='none';
+                document.getElementById('ev-final').style.display='block';
+            }
+        }
+        function checkEv(i) {
+            if(i === evData[curE].r) { curE++; runEval(); }
+            else { alert("Kurang tepat. Coba pikirkan kembali teknik Mind Switch atau Slow Reaction!"); }
+        }
+    </script>
+</body>
+</html>
